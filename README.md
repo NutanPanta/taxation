@@ -46,5 +46,3 @@ CSRF_TRUSTED_ORIGINS="<CSRF TRUSTED ORIGINS>"
 All the api related documentation can be found inside **docs** folder within the repo.
 
 **\*.postman_collection.json** is for importing collection to postman.
-
-**\*.postman_collection.html** is for viewing collecion locally.
