@@ -4,11 +4,9 @@ from core.utilities import response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
 
 from serializers.tax_docs import (
     CreateTaxPayerSerializer,
-    UpdateTaxPayerSerializer,
     ViewTaxPayerSerializer,
 )
 
@@ -45,25 +43,27 @@ class TaxPayerAPIView(APIView):
         )
 
     def put(self, request):
-        taxpayer = TaxPayer.objects.get(user=self.request.user)
+        taxpayer = TaxPayer.objects.get(user=request.user.id)
 
-        _code = status.HTTP_403_FORBIDDEN
+        if taxpayer:
+            _code = status.HTTP_403_FORBIDDEN
 
-        if taxpayer.reviewed:
-            return response(
-                data={},
-                errors={
-                    "detail": "Taxpayer record has already been reviewed and cannot be updated."
-                },
-                code=_code,
-            )
+            if taxpayer.reviewed:
+                return response(
+                    data={},
+                    errors={
+                        "detail": "Taxpayer record has already been reviewed and cannot be updated."
+                    },
+                    code=_code,
+                )
 
-        serializer = UpdateTaxPayerSerializer(taxpayer, data=request.data)
+            serializer = CreateTaxPayerSerializer(taxpayer, data=request.data)
 
-        _code = status.HTTP_400_BAD_REQUEST
+            _code = status.HTTP_400_BAD_REQUEST
 
-        if serializer.is_valid():
-            serializer.save()
-            _code = status.HTTP_200_OK
+            if serializer.is_valid():
+                serializer.save()
+                _code = status.HTTP_200_OK
 
-        return response(data=serializer.data, errors=serializer.errors, code=_code)
+            return response(data=serializer.data, errors=serializer.errors, code=_code)
+        return response(data={}, errors={})

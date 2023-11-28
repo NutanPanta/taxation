@@ -70,22 +70,6 @@ class CreateTaxPayerSerializer(serializers.ModelSerializer):
         return taxpayer
 
 
-class UpdateTaxPayerSerializer(CreateTaxPayerSerializer):
-    class Meta:
-        model = TaxPayer
-        fields = [
-            "name",
-            "social_security_number",
-            "date_of_birth",
-            "address",
-            "phone_number",
-            "employers",
-            "other_incomes",
-            "deductions",
-        ]
-        read_only_fields = ["user"]
-
-
 class ViewTaxPayerSerializer(serializers.ModelSerializer):
     employers = EmploymentSerializer(many=True, read_only=True)
     other_incomes = OtherIncomeSerializer(many=True, read_only=True)
