@@ -43,6 +43,7 @@ class TaxPayer(models.Model):
 
 
 class Employment(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     taxpayer = models.ForeignKey(
         TaxPayer,
         on_delete=models.CASCADE,
@@ -95,6 +96,7 @@ class OtherIncome(models.Model):
         ("prizes_awards", "Prizes and Awards"),
     ]
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     taxpayer = models.ForeignKey(
         TaxPayer,
         on_delete=models.CASCADE,
@@ -129,6 +131,7 @@ class Deduction(models.Model):
         ("job_related", "Job-Related Expenses"),
     ]
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     taxpayer = models.ForeignKey(
         TaxPayer,
         on_delete=models.CASCADE,
