@@ -70,7 +70,6 @@ class CreateTaxPayerSerializer(serializers.ModelSerializer):
         return taxpayer
 
     def update(self, instance, validated_data):
-        # Update logic for the top-level fields
         instance.name = validated_data.get("name", instance.name)
         instance.social_security_number = validated_data.get(
             "social_security_number", instance.social_security_number
@@ -83,7 +82,6 @@ class CreateTaxPayerSerializer(serializers.ModelSerializer):
             "phone_number", instance.phone_number
         )
 
-        # Update logic for nested fields
         self.update_nested_fields(
             instance.employers, validated_data.get("employers", []), Employment.objects
         )
@@ -96,13 +94,11 @@ class CreateTaxPayerSerializer(serializers.ModelSerializer):
             instance.deductions, validated_data.get("deductions", []), Deduction.objects
         )
 
-        # Save the changes to the instance
         instance.save()
 
         return instance
 
     def update_nested_fields(self, instance_list, validated_data_list, model_manager):
-        # Update logic for each nested field in the list
         for i, validated_data in enumerate(validated_data_list):
             if i < instance_list.all().count():
                 instance = instance_list.all()[i]
@@ -110,7 +106,6 @@ class CreateTaxPayerSerializer(serializers.ModelSerializer):
                     setattr(instance, key, value)
                 instance.save()
             else:
-                # If the instance doesn't exist, create a new one
                 model_manager.create(taxpayer=instance.taxpayer, **validated_data)
 
 
