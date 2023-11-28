@@ -7,19 +7,19 @@ from custom_user.models import User
 class EmploymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employment
-        fields = ["id", "employer_name", "income", "taxes_withheld"]
+        fields = ["employer_name", "income", "taxes_withheld"]
 
 
 class OtherIncomeSerializer(serializers.ModelSerializer):
     class Meta:
         model = OtherIncome
-        fields = ["id", "income_type", "amount"]
+        fields = ["income_type", "amount"]
 
 
 class DeductionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deduction
-        fields = ["id", "deduction_type", "amount"]
+        fields = ["deduction_type", "amount"]
 
 
 class CreateTaxPayerSerializer(serializers.ModelSerializer):
