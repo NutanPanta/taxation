@@ -45,8 +45,10 @@ class Dev(Configuration):
         "django.contrib.staticfiles",
         "corsheaders",
         "rest_framework",
+        "phonenumber_field",
         "v1",
         "custom_user",
+        "taxpayer",
     ]
 
     cloudinary.config(

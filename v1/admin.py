@@ -1,12 +1,10 @@
 from django.contrib.admin import AdminSite
 
 
-class WordCouch(AdminSite):
-    site_header = "Word Couch Project Management"
-    site_title = "Word Couch"
+class Taxation(AdminSite):
+    site_header = "Taxation Project Management"
+    site_title = "Taxation"
     index_title = "Admin Dashboard"
 
 
-admin_site = WordCouch(name="Word Couch Admin")
-
-
+admin_site = Taxation(name="Taxation Admin")
