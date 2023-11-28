@@ -12,22 +12,29 @@ class TaxPayerReviewAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        taxpayer = TaxPayer.objects.get(user=request.user)
+        try:
+            taxpayer = TaxPayer.objects.get(user=request.user.id)
 
-        _code = status.HTTP_403_FORBIDDEN
+            _code = status.HTTP_403_FORBIDDEN
 
-        if taxpayer.reviewed:
+            if taxpayer.reviewed:
+                return response(
+                    data={},
+                    errors={},
+                    code=_code,
+                )
+
+            _code = status.HTTP_200_OK
+
+            taxpayer.reviewed = True
+            taxpayer.save()
+
+            serializer = CreateTaxPayerSerializer(taxpayer)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except TaxPayer.DoesNotExist:
             return response(
                 data={},
-                errors={},
-                code=_code,
+                errors={"detail": "Taxpayer Details Not Found"},
+                code=status.HTTP_404_NOT_FOUND,
             )
-
-        _code = status.HTTP_200_OK
-
-        taxpayer.reviewed = True
-        taxpayer.save()
-
-        serializer = CreateTaxPayerSerializer(taxpayer)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)

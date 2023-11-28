@@ -15,15 +15,16 @@ class TaxPayerAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        taxpayer = TaxPayer.objects.get(user=request.user.id)
-        if taxpayer:
+        try:
+            taxpayer = TaxPayer.objects.get(user=request.user.id)
             taxpayer_with_related = TaxPayer.objects.prefetch_related(
                 "employers", "other_incomes", "deductions"
             ).get(id=taxpayer.id)
 
             serializer = ViewTaxPayerSerializer(taxpayer_with_related)
             return response(serializer.data)
-        return response(data={}, errors={})
+        except TaxPayer.DoesNotExist:
+            return response(data={}, errors={})
 
     def post(self, request):
         serializer = CreateTaxPayerSerializer(

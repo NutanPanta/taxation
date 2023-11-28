@@ -125,4 +125,6 @@ class ViewTaxPayerSerializer(serializers.ModelSerializer):
             "employers",
             "other_incomes",
             "deductions",
+            "reviewed",
+            "accepted",
         ]
