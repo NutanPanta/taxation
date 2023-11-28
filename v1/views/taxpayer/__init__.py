@@ -42,7 +42,7 @@ class TaxPayerAPIView(APIView):
             code=_code,
         )
 
-    def put(self, request):
+    def patch(self, request):
         taxpayer = TaxPayer.objects.get(user=request.user.id)
 
         if taxpayer:
@@ -57,7 +57,9 @@ class TaxPayerAPIView(APIView):
                     code=_code,
                 )
 
-            serializer = CreateTaxPayerSerializer(taxpayer, data=request.data)
+            serializer = CreateTaxPayerSerializer(
+                taxpayer, data=request.data, partial=True
+            )
 
             _code = status.HTTP_400_BAD_REQUEST
 

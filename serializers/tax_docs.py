@@ -7,19 +7,19 @@ from custom_user.models import User
 class EmploymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employment
-        fields = ["employer_name", "income", "taxes_withheld"]
+        fields = ["id", "employer_name", "income", "taxes_withheld"]
 
 
 class OtherIncomeSerializer(serializers.ModelSerializer):
     class Meta:
         model = OtherIncome
-        fields = ["income_type", "amount"]
+        fields = ["id", "income_type", "amount"]
 
 
 class DeductionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deduction
-        fields = ["deduction_type", "amount"]
+        fields = ["id", "deduction_type", "amount"]
 
 
 class CreateTaxPayerSerializer(serializers.ModelSerializer):
@@ -68,6 +68,50 @@ class CreateTaxPayerSerializer(serializers.ModelSerializer):
             Deduction.objects.create(taxpayer=taxpayer, **deduction_data)
 
         return taxpayer
+
+    def update(self, instance, validated_data):
+        # Update logic for the top-level fields
+        instance.name = validated_data.get("name", instance.name)
+        instance.social_security_number = validated_data.get(
+            "social_security_number", instance.social_security_number
+        )
+        instance.date_of_birth = validated_data.get(
+            "date_of_birth", instance.date_of_birth
+        )
+        instance.address = validated_data.get("address", instance.address)
+        instance.phone_number = validated_data.get(
+            "phone_number", instance.phone_number
+        )
+
+        # Update logic for nested fields
+        self.update_nested_fields(
+            instance.employers, validated_data.get("employers", []), Employment.objects
+        )
+        self.update_nested_fields(
+            instance.other_incomes,
+            validated_data.get("other_incomes", []),
+            OtherIncome.objects,
+        )
+        self.update_nested_fields(
+            instance.deductions, validated_data.get("deductions", []), Deduction.objects
+        )
+
+        # Save the changes to the instance
+        instance.save()
+
+        return instance
+
+    def update_nested_fields(self, instance_list, validated_data_list, model_manager):
+        # Update logic for each nested field in the list
+        for i, validated_data in enumerate(validated_data_list):
+            if i < instance_list.all().count():
+                instance = instance_list.all()[i]
+                for key, value in validated_data.items():
+                    setattr(instance, key, value)
+                instance.save()
+            else:
+                # If the instance doesn't exist, create a new one
+                model_manager.create(taxpayer=instance.taxpayer, **validated_data)
 
 
 class ViewTaxPayerSerializer(serializers.ModelSerializer):
