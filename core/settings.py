@@ -25,9 +25,11 @@ class Dev(Configuration):
 
     CORS_ALLOW_METHODS = list(default_methods)
 
-    CORS_ALLOW_ALL_ORIGINS = True
+    # CORS_ALLOW_ALL_ORIGINS = True
 
-    CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(";")
+    CORS_ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "").split(";")
+
+    CSRF_TRUSTED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "").split(";")
 
     SITE_ID = 1
 
@@ -43,8 +45,10 @@ class Dev(Configuration):
         "django.contrib.staticfiles",
         "corsheaders",
         "rest_framework",
+        "phonenumber_field",
         "v1",
         "custom_user",
+        "taxpayer",
     ]
 
     cloudinary.config(
@@ -55,6 +59,7 @@ class Dev(Configuration):
     )
 
     MIDDLEWARE = [
+        "corsheaders.middleware.CorsMiddleware",
         "django.middleware.security.SecurityMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.middleware.common.CommonMiddleware",
@@ -82,7 +87,7 @@ class Dev(Configuration):
         },
     ]
 
-    WSGI_APPLICATION = "core.wsgi.app"
+    WSGI_APPLICATION = "core.wsgi.application"
 
     DATABASES = {
         "default": {

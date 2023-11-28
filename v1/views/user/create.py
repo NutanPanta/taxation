@@ -21,7 +21,8 @@ class UserCreateView(APIView):
 
         new_data = serializer.data.copy()
 
-        new_data.pop("password")
+        if new_data.get("password", None):
+            new_data.pop("password")
 
         return response(
             data=new_data,
