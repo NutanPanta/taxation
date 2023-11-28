@@ -137,12 +137,12 @@
 							"formdata": [
 								{
 									"key": "email",
-									"value": "nutanrajpanta@gmail.com",
+									"value": "nutanrajpanta+el@gmail.com",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "user",
+									"value": ")PSci.HAg7+y7t",
 									"type": "text"
 								}
 							]
@@ -217,6 +217,102 @@
 				}
 			],
 			"description": "User Token Authentication and Refresh Token"
+		},
+		{
+			"name": "TaxPayer",
+			"item": [
+				{
+					"name": "Create Taxpayer Tax Docs",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Nutan Panta\",\n  \"social_security_number\": \"12345678901\",\n  \"date_of_birth\": \"2001-10-20\",\n  \"address\": \"Banasthali,Kathmandu\",\n  \"phone_number\": \"+977 9840354391\",\n  \"employers\": [\n    {\n      \"employer_name\": \"Employer 1\",\n      \"income\": 1000000,\n      \"taxes_withheld\": 100000\n    },\n    {\n      \"employer_name\": \"Employer 2\",\n      \"income\": 500000,\n      \"taxes_withheld\": 50000\n    }\n  ],\n  \"other_incomes\": [\n    {\n      \"income_type\": \"self_employment\",\n      \"amount\": 100000\n    },\n    {\n      \"income_type\": \"rental\",\n      \"amount\": 2400000\n    },\n    {\n      \"income_type\": \"capital_gains\",\n      \"amount\": 50000\n    }\n  ],\n  \"deductions\": [\n    {\n      \"deduction_type\": \"education\",\n      \"amount\": 700000\n    },\n    {\n      \"deduction_type\": \"job_related\",\n      \"amount\": 100000\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/taxpayer/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"taxpayer",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Taxpayer Tax Docs",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"employers\": [\n        {\n            \"employer_name\": \"Employer 1\",\n            \"income\": \"1000000.00\",\n            \"taxes_withheld\": \"100000.00\"\n        },\n        {\n            \"employer_name\": \"Employer 2\",\n            \"income\": \"500000.00\",\n            \"taxes_withheld\": \"50000.00\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/taxpayer/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"taxpayer",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Taxpayer Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/taxpayer/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"taxpayer",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Review Tax Docs",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/taxpayer/review/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"taxpayer",
+								"review",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"auth": {

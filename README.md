@@ -14,6 +14,10 @@ To install the dependencies, you can use the following command:
 
 `docker build -t <TAG NAME> .`
 
+or
+
+`docker compose up`
+
 ## Environment variables
 
 ```
