@@ -7,7 +7,13 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class TaxPayer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.PROTECT, db_index=True)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.PROTECT,
+        db_index=True,
+        related_name="%(class)s_user",
+        unique=True,
+    )
     name = models.CharField(
         blank=False,
         max_length=100,
@@ -22,6 +28,8 @@ class TaxPayer(models.Model):
         blank=False,
         null=False,
     )
+    reviewed = models.BooleanField(default=False)
+    accepted = models.BooleanField(default=False)
     created_at = models.DateTimeField(
         auto_now_add=True,
     )
@@ -35,7 +43,11 @@ class TaxPayer(models.Model):
 
 
 class Employment(models.Model):
-    taxpayer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE)
+    taxpayer = models.ForeignKey(
+        TaxPayer,
+        on_delete=models.CASCADE,
+        related_name="employers",
+    )
     employer_name = models.CharField(
         blank=False,
         max_length=100,
@@ -83,7 +95,11 @@ class OtherIncome(models.Model):
         ("prizes_awards", "Prizes and Awards"),
     ]
 
-    taxpayer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE)
+    taxpayer = models.ForeignKey(
+        TaxPayer,
+        on_delete=models.CASCADE,
+        related_name="other_incomes",
+    )
     income_type = models.CharField(null=False, blank=False, choices=INCOME_CHOICES)
     amount = models.DecimalField(
         max_digits=15,
@@ -113,7 +129,11 @@ class Deduction(models.Model):
         ("job_related", "Job-Related Expenses"),
     ]
 
-    taxpayer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE)
+    taxpayer = models.ForeignKey(
+        TaxPayer,
+        on_delete=models.CASCADE,
+        related_name="deductions",
+    )
     deduction_type = models.CharField(
         null=False, blank=False, choices=DEDUCTION_CHOICES
     )

@@ -48,7 +48,7 @@ class Dev(Configuration):
         "phonenumber_field",
         "v1",
         "custom_user",
-        "taxation",
+        "taxpayer",
     ]
 
     cloudinary.config(
